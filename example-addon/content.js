@@ -11,7 +11,7 @@
         name: 'Example Addon',
         version: '1.7.0',
         description: 'Example addon using the Egodact Addon Library.',
-        author: 'Egodact community'
+        author: 'MaxiTaxi'
     });
 
     client.registerMenu({
