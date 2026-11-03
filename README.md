@@ -74,9 +74,6 @@ const toggle = ui.toggle('My floating button', enabled, function (value) {
 | `sdk.js` | Client SDK (v2). |
 | `lib.js` | Egodact Addon Library (v1). |
 | `content.js` | Addon logic. |
-| `README.md` | Detailed documentation. |
-
-See `example-addon/README.md` for full documentation and examples.
 
 ## Notes
 
