@@ -37,6 +37,17 @@
         icon: '&#127918;'
     });
 
+    client.registerButton({
+        addonId: 'my-addon',
+        id: 'my-floating-btn',
+        title: 'My floating button',
+        icon: '📌',
+        position: 'floating',
+        x: 670,
+        y: 300,
+        draggable: true
+    });
+
     client.onOpen('example-menu', function () {
         const body = ui.card({
             title: 'Example Addon',
@@ -44,7 +55,7 @@
                 ui.row({ children: [
                     ui.button('Say hi', function () { ui.toast('Hello from the library!', { type: 'success' }); }),
                     ui.button('Danger', function () { ui.toast('Oops!', { type: 'error' }); }, { background: theme().gevaar, color: '#fff' }),
-                    ui.button('Info', function () { ui.toast('This is an info message.', { type: 'info', background: '#2e7d32', color: '#fff' }); }, { background: '#2e7d32', color: '#fff' })
+                    ui.button('Info', function () { ui.toast('This is an info message.', { type: 'info' }); }, { background: '#2e7d32', color: '#fff' })
                 ]})
             ]
         });
