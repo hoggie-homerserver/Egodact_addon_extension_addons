@@ -30,6 +30,10 @@
         client.openModal('Example Addon', '<p>Hello from an addon!</p>');
     });
 
+    client.onOpen('example-button', function () {
+        client.openModal('Example Button', '<p>You clicked the example header button!</p>');
+    });
+
     client.onOpen('example-clicker', function () {
         let score = 0;
         const backdrop = client.openModal('Example Clicker', `
