@@ -43,7 +43,7 @@
             children: [
                 ui.row({ children: [
                     ui.button('Say hi', function () { ui.toast('Hello from the library!', { type: 'success' }); }),
-                    ui.button('Danger', function () { ui.toast('Oops!', { type: 'error' }); }, { background: theme().gevaar, color: '#fff' })
+                    ui.button('Danger', function () { ui.toast('Oops!', { type: 'error' }); }, { background: theme().gevaar, color: '#fff' }),
                     ui.button('Info', function () { ui.toast('This is an info message.', { type: 'info' }); }, { background: theme().accent, color: '#fff' })
                 ]})
             ]
