@@ -21,6 +21,7 @@
         icon: '&#10024;'
     });
 
+    // Header button in the top bar.
     client.registerButton({
         addonId: 'example-addon',
         id: 'example-button',
@@ -29,23 +30,24 @@
         position: 'header'
     });
 
+    // Floating button (anywhere on screen).
+    client.registerButton({
+        addonId: 'example-addon',
+        id: 'example-floating-btn',
+        title: 'Example floating button',
+        icon: '📌',
+        position: 'floating',
+        x: 670,
+        y: 300,
+        draggable: true
+    });
+
     client.registerGame({
         addonId: 'example-addon',
         id: 'example-clicker',
         title: 'Example Clicker',
         description: 'Click as fast as you can.',
         icon: '&#127918;'
-    });
-
-    client.registerButton({
-        addonId: 'my-addon',
-        id: 'my-floating-btn',
-        title: 'My floating button',
-        icon: '📌',
-        position: 'floating',
-        x: 670,
-        y: 300,
-        draggable: true
     });
 
     client.onOpen('example-menu', function () {
@@ -62,8 +64,24 @@
         ui.modal('Example Addon', body);
     });
 
+    // Header button opens a panel to toggle the floating button on/off.
     client.onOpen('example-button', function () {
-        client.openModal('Example Button', '<p>You clicked the example header button!</p>');
+        const enabled = client.isButtonEnabled('example-addon', 'example-floating-btn');
+        const status = el('div', { text: enabled ? 'Floating button is ON' : 'Floating button is OFF', style: { fontSize: '13px', color: theme().tekstZacht, marginBottom: '8px' } });
+
+        const toggle = ui.toggle('Floating button', enabled, function (value) {
+            client.setButtonEnabled('example-addon', 'example-floating-btn', value);
+            status.textContent = value ? 'Floating button is ON' : 'Floating button is OFF';
+            ui.toast(value ? 'Floating button enabled' : 'Floating button disabled', { type: value ? 'success' : 'info' });
+            // Re-render without full reload: ask host to update.
+            // (Host removes/adds the button via voegKnoppenToe.)
+        });
+
+        const body = ui.card({
+            title: 'Example Button',
+            children: [toggle, status]
+        });
+        ui.modal('Example Button', body);
     });
 
     client.onOpen('example-clicker', function () {

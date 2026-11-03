@@ -63,6 +63,28 @@
         registerMenu: function (meta) { dispatch('menu', meta || {}); },
         registerButton: function (meta) { dispatch('button', meta || {}); },
         registerGame: function (meta) { dispatch('game', meta || {}); },
+        setButtonEnabled: function (addonId, id, enabled) {
+            enabled = !!enabled;
+            try {
+                const key = (addonId || '') + ':' + (id || '');
+                const raw = localStorage.getItem('egodact_disabled_addon_buttons');
+                const list = raw ? JSON.parse(raw) : [];
+                const arr = Array.isArray(list) ? list : [];
+                const idx = arr.indexOf(key);
+                if (enabled) { if (idx !== -1) arr.splice(idx, 1); }
+                else { if (idx === -1) arr.push(key); }
+                localStorage.setItem('egodact_disabled_addon_buttons', JSON.stringify(arr));
+            } catch (err) {}
+            dispatch('button-toggle', { addonId: addonId, id: id, enabled: enabled });
+        },
+        isButtonEnabled: function (addonId, id) {
+            try {
+                const key = (addonId || '') + ':' + (id || '');
+                const raw = localStorage.getItem('egodact_disabled_addon_buttons');
+                const list = raw ? JSON.parse(raw) : [];
+                return !(Array.isArray(list) && list.indexOf(key) !== -1);
+            } catch (err) { return true; }
+        },
         onOpen: function (id, cb) {
             if (!listeners[id]) listeners[id] = [];
             listeners[id].push(cb);
