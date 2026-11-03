@@ -7,7 +7,7 @@
         id: 'example-addon',
         name: 'Example Addon',
         version: '1.6.0',
-        description: 'A minimal example addon with a menu, a game, a header button and a fixed button.',
+        description: 'A minimal example addon with a menu and a game.',
         author: 'Egodact community'
     });
 
@@ -18,26 +18,13 @@
         icon: '&#10024;'
     });
 
-    // Header-knop in de topbalk van Egodact.
+    // Header-knop in de topbalk van Egodact (SVG-icoon in Egodact-stijl).
     client.registerButton({
         addonId: 'example-addon',
         id: 'example-button',
         title: 'Example header button',
-        icon: '&#11088;',
+        icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:1;display:block;pointer-events:none;"><path d="M9 7V2"></path><path d="M15 7V2"></path><rect x="5" y="7" width="14" height="10" rx="2"></rect><path d="M12 17v5"></path></svg>`,
         position: 'header'
-    });
-
-    // Vaste knop op een specifieke plek op het scherm (niet sleepbaar).
-    // Verander x en y naar de gewenste positie.
-    client.registerButton({
-        addonId: 'example-addon',
-        id: 'example-fixed-button',
-        title: 'Example fixed button',
-        icon: '&#128204;',
-        position: 'floating',
-        x: 24,
-        y: 180,
-        draggable: false
     });
 
     client.registerGame({
@@ -54,10 +41,6 @@
 
     client.onOpen('example-button', function () {
         client.openModal('Example Button', '<p>You clicked the example header button!</p>');
-    });
-
-    client.onOpen('example-fixed-button', function () {
-        client.openModal('Example Fixed Button', '<p>This button is placed at a fixed position on the screen.</p>');
     });
 
     client.onOpen('example-clicker', function () {
