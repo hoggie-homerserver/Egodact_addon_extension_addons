@@ -40,7 +40,6 @@
     client.onOpen('example-menu', function () {
         const body = ui.card({
             title: 'Example Addon',
-            background: '#2e7d32',
             children: [
                 ui.row({ children: [
                     ui.button('Say hi', function () { ui.toast('Hello from the library!', { type: 'success' }); }),
@@ -49,7 +48,7 @@
                 ]})
             ]
         });
-        ui.modal('Example Addon', body, { background: '#2e7d32' });
+        ui.modal('Example Addon', body);
     });
 
     client.onOpen('example-button', function () {
