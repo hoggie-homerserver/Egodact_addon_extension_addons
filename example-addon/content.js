@@ -6,8 +6,8 @@
     client.registerAddon({
         id: 'example-addon',
         name: 'Example Addon',
-        version: '1.5.0',
-        description: 'A minimal example addon with a menu and a game.',
+        version: '1.6.0',
+        description: 'A minimal example addon with a menu, a game, a header button and a floating button.',
         author: 'Egodact community'
     });
 
@@ -15,7 +15,29 @@
         addonId: 'example-addon',
         id: 'example-menu',
         title: 'Example menu',
-        icon: '?'
+        icon: '&#10024;'
+    });
+
+    // Header-knop in de topbalk van Egodact.
+    client.registerButton({
+        addonId: 'example-addon',
+        id: 'example-button',
+        title: 'Example header button',
+        icon: '&#11088;',
+        position: 'header'
+    });
+
+    // Zwevende knop: overal op het scherm te slepen.
+    // De positie wordt onthouden in localStorage.
+    client.registerButton({
+        addonId: 'example-addon',
+        id: 'example-floating-button',
+        title: 'Example floating button (sleep mij)',
+        icon: '&#128204;',
+        position: 'floating',
+        x: 24,
+        y: 180,
+        draggable: true
     });
 
     client.registerGame({
@@ -23,7 +45,7 @@
         id: 'example-clicker',
         title: 'Example Clicker',
         description: 'Click as fast as you can.',
-        icon: '??'
+        icon: '&#127918;'
     });
 
     client.onOpen('example-menu', function () {
@@ -32,6 +54,10 @@
 
     client.onOpen('example-button', function () {
         client.openModal('Example Button', '<p>You clicked the example header button!</p>');
+    });
+
+    client.onOpen('example-floating-button', function () {
+        client.openModal('Example Floating Button', '<p>This button can be dragged anywhere on the screen.</p>');
     });
 
     client.onOpen('example-clicker', function () {
