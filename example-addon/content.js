@@ -115,7 +115,6 @@
         const observer = new MutationObserver(function () {
             if (!document.body.contains(backdrop)) {
                 loop.stop();
-                input.destroy();
                 observer.disconnect();
             }
         });
