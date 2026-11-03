@@ -1,25 +1,50 @@
 // ============================================================
-// EGODACT ADDON CLIENT SDK
+// EGODACT ADDON CLIENT SDK (v2)
 // ============================================================
-// Kopieer dit bestand in je addon-extensie en laad het vóór je
-// addon-code. Het biedt een kleine wrapper rond de CustomEvent-brug
-// met de Egodact basis-extensie.
-//
-// Gebruik:
-//   EgodactAddonClient.registerAddon({ id, name, version, description, author });
-//   EgodactAddonClient.registerMenu({ addonId, id, title, icon });
-//   EgodactAddonClient.onOpen(id, function () { ... });
-
 (function () {
     'use strict';
 
+    let hostReady = (typeof window !== 'undefined' && window.__egodactHostReady === true);
+    const queue = [];
+
+    function flush() {
+        while (queue.length) {
+            const item = queue.shift();
+            try {
+                document.dispatchEvent(new CustomEvent('egodact:addon:register', {
+                    detail: { type: item.type, meta: item.meta }
+                }));
+            } catch (err) {
+                console.error('Egodact addon dispatch mislukt:', err);
+            }
+        }
+    }
+
+    document.addEventListener('egodact:host:ready', function () {
+        hostReady = true;
+        window.__egodactHostReady = true;
+        flush();
+    });
+
+    // Fallback: als de host er niet is, toch proberen na 1s.
+    setTimeout(function () {
+        if (!hostReady) {
+            hostReady = true;
+            flush();
+        }
+    }, 1000);
+
     function dispatch(type, meta) {
-        try {
-            document.dispatchEvent(new CustomEvent('egodact:addon:register', {
-                detail: { type: type, meta: meta }
-            }));
-        } catch (err) {
-            console.error('Egodact addon dispatch mislukt:', err);
+        if (hostReady) {
+            try {
+                document.dispatchEvent(new CustomEvent('egodact:addon:register', {
+                    detail: { type: type, meta: meta }
+                }));
+            } catch (err) {
+                console.error('Egodact addon dispatch mislukt:', err);
+            }
+        } else {
+            queue.push({ type: type, meta: meta });
         }
     }
 
@@ -42,7 +67,6 @@
             if (!listeners[id]) listeners[id] = [];
             listeners[id].push(cb);
         },
-        // Hulp: eigen modal maken in addon-stijl (gebruikt Egodact CSS-vars)
         openModal: function (titel, bodyHtml) {
             const bestaand = document.getElementById('egodact-custom-modal-backdrop');
             if (bestaand) bestaand.remove();
@@ -74,14 +98,4 @@
     };
 
     window.EgodactAddonClient = EgodactAddonClient;
-
-    // Wacht op host-ready of registreer direct (events worden alsnog afgehandeld).
-    function registreer() {
-        document.dispatchEvent(new CustomEvent('egodact:addon:client-ready'));
-    }
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', registreer);
-    } else {
-        registreer();
-    }
 })();
