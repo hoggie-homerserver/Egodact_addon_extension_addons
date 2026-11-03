@@ -46,7 +46,7 @@
         addonId: 'example-addon',
         id: 'example-clicker',
         title: 'Example Clicker',
-        description: 'Click the cube.',
+        description: 'Click the cube',
         icon: '&#127918;'
     });
 
