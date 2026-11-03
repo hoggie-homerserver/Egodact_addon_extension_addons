@@ -149,3 +149,23 @@ Disabled button ids are stored in `localStorage` under `egodact_disabled_addon_b
 - Disabled addons stay registered in the host's known list so they can be re-enabled.
 - Floating button positions are saved in `localStorage` under `egodact_addon_btn_pos_<id>`.
 - The host and the library are MV3-compatible (no `eval`).
+
+## Toggling buttons at runtime
+
+Each button can be toggled on/off without reloading the page:
+
+`js
+const enabled = client.isButtonEnabled('my-addon', 'my-floating-btn');
+client.setButtonEnabled('my-addon', 'my-floating-btn', false); // hide
+client.setButtonEnabled('my-addon', 'my-floating-btn', true);  // show
+`
+
+Use \ui.toggle\ to build a slider in a modal:
+
+`js
+const toggle = ui.toggle('My floating button', enabled, function (value) {
+    client.setButtonEnabled('my-addon', 'my-floating-btn', value);
+    ui.toast(value ? 'Enabled' : 'Disabled', { type: value ? 'success' : 'info' });
+});
+ui.modal('Settings', ui.card({ title: 'Settings', children: [toggle] }));
+`
