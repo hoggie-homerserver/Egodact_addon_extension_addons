@@ -33,7 +33,7 @@
         addonId: 'example-addon',
         id: 'example-clicker',
         title: 'Example Clicker',
-        description: 'Click the square as many times as you can.',
+        description: 'Click as fast as you can.',
         icon: '&#127918;'
     });
 
@@ -59,67 +59,39 @@
         let score = store.get('score', 0);
 
         const { canvas, ctx, width, height } = game.createCanvas(null, 320, 220, { background: theme().veld });
-
-        // The square stays put until clicked, then jumps to a new spot.
-        let target = { x: width / 2 - 25, y: height / 2 - 25, w: 50, h: 50 };
-        let flash = 0;
+        const input = game.input();
+        let target = { x: width / 2 - 20, y: height / 2 - 20, w: 40, h: 40, vx: 120, vy: 90 };
         let particles = [];
-        let moveTimer = 10.0; // auto-move after 10s if not clicked (fallback)
-
-        function newTarget() {
-            target.x = Math.random() * (width - target.w);
-            target.y = Math.random() * (height - target.h);
-            moveTimer = 2.0;
-        }
 
         const scoreEl = el('div', { text: 'Score: ' + score, style: { fontSize: '16px', fontWeight: 'bold', color: theme().tekst, marginBottom: '8px' } });
 
-        // Generous hitbox so clicks register reliably.
-        function tryHit(mx, my) {
-            const pad = 10;
-            if (mx >= target.x - pad && mx <= target.x + target.w + pad &&
-                my >= target.y - pad && my <= target.y + target.h + pad) {
+        canvas.addEventListener('click', function (e) {
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            const my = e.clientY - rect.top;
+            if (mx >= target.x && mx <= target.x + target.w && my >= target.y && my <= target.y + target.h) {
                 score++;
                 scoreEl.textContent = 'Score: ' + score;
                 store.set('score', score);
-                flash = 0.3;
                 particles.push({ x: target.x + target.w / 2, y: target.y + target.h / 2, life: 0.5, color: theme().accent });
-                newTarget();
-                return true;
+                target.x = Math.random() * (width - target.w);
+                target.y = Math.random() * (height - target.h);
             }
-            return false;
-        }
-
-        canvas.addEventListener('click', function (e) {
-            const rect = canvas.getBoundingClientRect();
-            tryHit(e.clientX - rect.left, e.clientY - rect.top);
-        });
-        canvas.addEventListener('pointerup', function (e) {
-            const rect = canvas.getBoundingClientRect();
-            tryHit(e.clientX - rect.left, e.clientY - rect.top);
         });
 
         const loop = game.loop(function (dt) {
-            moveTimer -= dt;
-            if (moveTimer <= 0) newTarget();
-            flash = Math.max(0, flash - dt);
+            target.x += target.vx * dt;
+            target.y += target.vy * dt;
+            if (target.x <= 0 || target.x + target.w >= width) target.vx *= -1;
+            if (target.y <= 0 || target.y + target.h >= height) target.vy *= -1;
             particles = particles.filter(function (p) { p.life -= dt; return p.life > 0; });
         }, function () {
             game.clear(ctx, theme().veld);
-            if (flash > 0) {
-                ctx.globalAlpha = flash * 4;
-                game.rect(ctx, target.x - 4, target.y - 4, target.w + 8, target.h + 8, theme().accent, { radius: 10 });
-                ctx.globalAlpha = 1;
-            }
-            game.rect(ctx, target.x, target.y, target.w, target.h, theme().accent, { radius: 8 });
-            ctx.strokeStyle = theme().tekst;
-            ctx.lineWidth = 2;
-            ctx.strokeRect(target.x, target.y, target.w, target.h);
+            game.rect(ctx, target.x, target.y, target.w, target.h, theme().accent, { radius: 6 });
             particles.forEach(function (p) {
-                game.circle(ctx, p.x, p.y, 10 * p.life, p.color);
+                game.circle(ctx, p.x, p.y, 8 * p.life, p.color);
             });
             game.text(ctx, 'Click the square!', 8, 8, { color: theme().tekstZacht, size: 12 });
-            game.text(ctx, 'Score: ' + score, 8, 26, { color: theme().tekst, size: 12, bold: true });
         });
 
         const body = ui.col({ children: [scoreEl, canvas, ui.button('Reset score', function () {
