@@ -6,7 +6,7 @@
     client.registerAddon({
         id: 'example-addon',
         name: 'Example Addon',
-        version: '1.0.0',
+        version: '1.5.0',
         description: 'A minimal example addon with a menu and a game.',
         author: 'Egodact community'
     });
