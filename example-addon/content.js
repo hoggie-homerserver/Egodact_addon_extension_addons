@@ -40,15 +40,16 @@
     client.onOpen('example-menu', function () {
         const body = ui.card({
             title: 'Example Addon',
+            background: '#2e7d32',
             children: [
                 ui.row({ children: [
                     ui.button('Say hi', function () { ui.toast('Hello from the library!', { type: 'success' }); }),
                     ui.button('Danger', function () { ui.toast('Oops!', { type: 'error' }); }, { background: theme().gevaar, color: '#fff' }),
-                    ui.button('Info', function () { ui.toast('This is an info message.', { type: 'info' }); }, { background: '#2e7d32', color: '#fff' })
+                    ui.button('Info', function () { ui.toast('This is an info message.', { type: 'info', background: '#2e7d32', color: '#fff' }); }, { background: '#2e7d32', color: '#fff' })
                 ]})
             ]
         });
-        ui.modal('Example Addon', body);
+        ui.modal('Example Addon', body, { background: '#2e7d32' });
     });
 
     client.onOpen('example-button', function () {
@@ -60,7 +61,6 @@
         let score = store.get('score', 0);
 
         const { canvas, ctx, width, height } = game.createCanvas(null, 320, 220, { background: theme().veld });
-        const input = game.input();
         let target = { x: width / 2 - 20, y: height / 2 - 20, w: 40, h: 40, vx: 120, vy: 90 };
         let particles = [];
 
