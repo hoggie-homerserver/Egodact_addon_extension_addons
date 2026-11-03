@@ -59,52 +59,59 @@
         let score = store.get('score', 0);
 
         const { canvas, ctx, width, height } = game.createCanvas(null, 320, 220, { background: theme().veld });
+
+        // The square stays put until clicked, then jumps to a new spot.
         let target = { x: width / 2 - 25, y: height / 2 - 25, w: 50, h: 50 };
-        let stayTimer = 0;
         let flash = 0;
         let particles = [];
+        let moveTimer = 10.0; // auto-move after 10s if not clicked (fallback)
 
         function newTarget() {
             target.x = Math.random() * (width - target.w);
             target.y = Math.random() * (height - target.h);
-            stayTimer = 1.0; // seconds before it moves on its own
+            moveTimer = 2.0;
         }
-        newTarget();
 
         const scoreEl = el('div', { text: 'Score: ' + score, style: { fontSize: '16px', fontWeight: 'bold', color: theme().tekst, marginBottom: '8px' } });
 
-        // Generous hitbox (target + 8px padding) so clicks register reliably.
-        canvas.addEventListener('click', function (e) {
-            const rect = canvas.getBoundingClientRect();
-            const mx = e.clientX - rect.left;
-            const my = e.clientY - rect.top;
-            const pad = 8;
+        // Generous hitbox so clicks register reliably.
+        function tryHit(mx, my) {
+            const pad = 10;
             if (mx >= target.x - pad && mx <= target.x + target.w + pad &&
                 my >= target.y - pad && my <= target.y + target.h + pad) {
                 score++;
                 scoreEl.textContent = 'Score: ' + score;
                 store.set('score', score);
-                flash = 0.25;
+                flash = 0.3;
                 particles.push({ x: target.x + target.w / 2, y: target.y + target.h / 2, life: 0.5, color: theme().accent });
                 newTarget();
+                return true;
             }
+            return false;
+        }
+
+        canvas.addEventListener('click', function (e) {
+            const rect = canvas.getBoundingClientRect();
+            tryHit(e.clientX - rect.left, e.clientY - rect.top);
+        });
+        canvas.addEventListener('pointerup', function (e) {
+            const rect = canvas.getBoundingClientRect();
+            tryHit(e.clientX - rect.left, e.clientY - rect.top);
         });
 
         const loop = game.loop(function (dt) {
-            stayTimer -= dt;
-            if (stayTimer <= 0) newTarget();
+            moveTimer -= dt;
+            if (moveTimer <= 0) newTarget();
             flash = Math.max(0, flash - dt);
             particles = particles.filter(function (p) { p.life -= dt; return p.life > 0; });
         }, function () {
             game.clear(ctx, theme().veld);
-            // flash effect
             if (flash > 0) {
                 ctx.globalAlpha = flash * 4;
                 game.rect(ctx, target.x - 4, target.y - 4, target.w + 8, target.h + 8, theme().accent, { radius: 10 });
                 ctx.globalAlpha = 1;
             }
             game.rect(ctx, target.x, target.y, target.w, target.h, theme().accent, { radius: 8 });
-            // outline for clarity
             ctx.strokeStyle = theme().tekst;
             ctx.lineWidth = 2;
             ctx.strokeRect(target.x, target.y, target.w, target.h);
