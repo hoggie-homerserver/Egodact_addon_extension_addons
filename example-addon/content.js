@@ -7,7 +7,7 @@
         id: 'example-addon',
         name: 'Example Addon',
         version: '1.6.0',
-        description: 'A minimal example addon with a menu, a game, a header button and a floating button.',
+        description: 'A minimal example addon with a menu, a game, a header button and a fixed button.',
         author: 'Egodact community'
     });
 
@@ -27,17 +27,17 @@
         position: 'header'
     });
 
-    // Zwevende knop: overal op het scherm te slepen.
-    // De positie wordt onthouden in localStorage.
+    // Vaste knop op een specifieke plek op het scherm (niet sleepbaar).
+    // Verander x en y naar de gewenste positie.
     client.registerButton({
         addonId: 'example-addon',
-        id: 'example-floating-button',
-        title: 'Example floating button (sleep mij)',
+        id: 'example-fixed-button',
+        title: 'Example fixed button',
         icon: '&#128204;',
         position: 'floating',
         x: 24,
         y: 180,
-        draggable: true
+        draggable: false
     });
 
     client.registerGame({
@@ -56,8 +56,8 @@
         client.openModal('Example Button', '<p>You clicked the example header button!</p>');
     });
 
-    client.onOpen('example-floating-button', function () {
-        client.openModal('Example Floating Button', '<p>This button can be dragged anywhere on the screen.</p>');
+    client.onOpen('example-fixed-button', function () {
+        client.openModal('Example Fixed Button', '<p>This button is placed at a fixed position on the screen.</p>');
     });
 
     client.onOpen('example-clicker', function () {
