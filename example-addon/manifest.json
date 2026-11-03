@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Egodact Addon: Example",
+  "version": "1.0.0",
+  "description": "Example addon for Egodact.",
+  "content_scripts": [
+    {
+      "matches": ["https://app.egodact.com/*"],
+      "js": ["sdk.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
