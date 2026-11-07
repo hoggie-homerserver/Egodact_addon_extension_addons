@@ -214,6 +214,60 @@ layout.scroll(node, { maxHeight: '300px' });
 const node = el('div', { class: 'foo', style: { color: 'red' }, text: 'hi', onClick: fn }, child1, child2);
 ```
 
+### Storage (per addon)
+
+```js
+const store = client.storage('my-addon');
+store.get('key', defaultValue);
+store.set('key', value);
+store.remove('key');
+```
+
+### Challenges (from the Egodact board)
+
+```js
+client.getChallenges().then(function (list) {
+    // list: [{ id, name, color, fase, einddatum, users, werelden, ... }]
+});
+
+client.onChallengesChanged(function (list) {
+    // called when the host fetches new challenge data
+});
+```
+
+### Theme changes
+
+```js
+client.onThemeChange(function (detail) {
+    // detail: { theme: 'dark' | 'light', dark: boolean }
+});
+```
+
+### Toast / notifications
+
+```js
+client.toast('Opgeslagen!', { type: 'success' });
+client.toast('Fout', { type: 'error', duration: 5000 });
+```
+
+Toast types: `success`, `error`, `info`, `warning`.
+
+### Topbar slots (ordering without DOM poking)
+
+```js
+client.registerButton({
+    addonId: 'my-addon',
+    id: 'my-btn',
+    title: 'My button',
+    icon: '⭐',
+    position: 'header',
+    slot: 'name',     // 'name' (next to user name) or 'actions' (default)
+    order: 5          // lower = earlier
+});
+```
+
+Older addons that omit `slot`/`order` keep the previous behaviour.
+
 ### Toggling buttons at runtime
 
 ```js
