@@ -44,6 +44,32 @@ client.registerMenu({
 });
 ```
 
+### Register a hamburger dropdown item
+
+Menu items in the **hamburger next to your name** are opt-in. Register them via
+the library, otherwise the hamburger stays hidden:
+
+```js
+const L = window.EgodactAddonLib;
+
+L.hamburger.add({
+    addonId: 'my-addon',
+    id: 'my-menu',        // same id you pass to client.onOpen(...)
+    title: 'My Menu',
+    icon: '<svg ...></svg>',   // optional, SVG string or text
+    order: 10                  // optional, lower = higher up
+});
+
+L.hamburger.onOpen('my-menu', function () {
+    // open your panel
+});
+```
+
+`L.ui.showInDropdown(...)` and `L.ui.onDropdownOpen(...)` are aliases.
+
+Only items registered through this helper appear in the hamburger. Plain
+`client.registerMenu()` entries stay in the Addons library.
+
 ### Register a button
 
 ```js

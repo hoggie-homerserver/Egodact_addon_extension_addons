@@ -639,6 +639,38 @@
     };
 
     // ============================================================
+    // HAMBURGER MENU HELPER
+    // ============================================================
+    // Items registered here appear in the host's hamburger dropdown
+    // (next to the user's name). Plain client.registerMenu() items do
+    // not; they only live in the Addons library.
+    const hamburger = {
+        add: function (meta) {
+            meta = meta || {};
+            const c = client();
+            if (c) {
+                if (typeof c.registerHamburger === 'function') c.registerHamburger(meta);
+                else if (typeof c.registerMenu === 'function') c.registerMenu(meta);
+                else {
+                    try {
+                        document.dispatchEvent(new CustomEvent('egodact:addon:register', {
+                            detail: { type: 'hamburger', meta: meta }
+                        }));
+                    } catch (err) {}
+                }
+            }
+            return meta.id;
+        },
+        onOpen: function (id, cb) {
+            const c = client();
+            if (c && typeof c.onOpen === 'function') c.onOpen(id, cb);
+        }
+    };
+
+    ui.showInDropdown = hamburger.add;
+    ui.onDropdownOpen = hamburger.onOpen;
+
+    // ============================================================
     // EXPORT
     // ============================================================
     const lib = {
@@ -649,7 +681,8 @@
         ui: ui,
         game: game,
         data: data,
-        layout: layout
+        layout: layout,
+        hamburger: hamburger
     };
 
     if (typeof module !== 'undefined' && module.exports) module.exports = lib;

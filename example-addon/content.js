@@ -21,6 +21,16 @@
         icon: '&#10024;'
     });
 
+    // Also expose it in the host hamburger dropdown. Only items added
+    // through the hamburger helper show up there.
+    L.hamburger.add({
+        addonId: 'example-addon',
+        id: 'example-menu',
+        title: 'Example menu',
+        order: 50,
+        icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.4L20 10l-4 3.6.9 5.9L12 16.7 7.1 19.5 8 13.6 4 10l5.8-1.6z"/></svg>'
+    });
+
     // Header button in the top bar.
     client.registerButton({
         addonId: 'example-addon',
