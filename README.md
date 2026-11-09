@@ -1,6 +1,6 @@
-# Egodact Addon: Example
+# Egodact Addon SDK & Library
 
-A minimal example addon for [Egodact](https://app.egodact.com), demonstrating menus, games, header buttons and the Egodact Addon Library.
+A minimal example addon for [Egodact](https://app.egodact.com), demonstrating menus, games, header buttons, sidebar panels and scheduling. Addons are **separate** browser extensions that talk to the host through DOM `CustomEvent`s only.
 
 ## Files
 
@@ -17,7 +17,7 @@ A minimal example addon for [Egodact](https://app.egodact.com), demonstrating me
 {
   "manifest_version": 3,
   "name": "Egodact Addon: Example",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Example addon for Egodact.",
   "content_scripts": [
     {
@@ -52,7 +52,7 @@ client.registerMenu({
     addonId: 'my-addon',
     id: 'my-menu',
     title: 'My Menu',
-    icon: '✨'
+    icon: ''
 });
 ```
 
@@ -64,7 +64,7 @@ client.registerButton({
     addonId: 'my-addon',
     id: 'my-header-btn',
     title: 'My button',
-    icon: '⭐',
+    icon: '',
     position: 'header'
 });
 
@@ -73,7 +73,7 @@ client.registerButton({
     addonId: 'my-addon',
     id: 'my-floating-btn',
     title: 'My floating button',
-    icon: '📌',
+    icon: '',
     position: 'floating',
     x: 100,
     y: 200,
@@ -89,7 +89,7 @@ client.registerGame({
     id: 'my-game',
     title: 'My Game',
     description: 'Play it.',
-    icon: '🎮'
+    icon: ''
 });
 ```
 
@@ -134,14 +134,9 @@ const { ui, game, data, layout, theme, el } = L;
 
 `layout.center`, `layout.grid`, `layout.scroll`. Plus generic `el(tag, props, ...children)`.
 
-## Complete example
+## Sidebar panels (weekplanning)
 
-See `content.js` in this folder.
-
-
-## Sidebar panels
-
-Add a panel to the weekplanning sidebar:
+Panels appear as a **second bar next to the weekplanning window**:
 
 ```js
 L.sidebar.add({
@@ -154,6 +149,12 @@ L.sidebar.add({
     }
 });
 ```
+
+Notes:
+- Only **metadata** (`addonId`, `id`, `title`, `icon`, `order`) is sent to the host. The `render` function stays in your addon.
+- The host dispatches `egodact:addon:open` with `{ id, containerId }` (strings only) once the panel's container is mounted. `L.sidebar.add` wires this to your `render(container)`.
+- Never put functions or DOM nodes in `CustomEvent.detail` yourself — Chromium silently drops the whole event.
+- Panels are removed automatically when the weekplanning closes and rebuilt when it reopens.
 
 ## Scheduling
 
@@ -171,8 +172,13 @@ L.scheduler.schedule({
 L.scheduler.cancel('my-reminder');
 ```
 
+## Complete example
+
+See `content.js` in this folder.
+
 ## Notes
 
 - Disabled addons stay registered in the host's known list so they can be re-enabled.
 - Floating button positions are saved in `localStorage` under `egodact_addon_btn_pos_<id>`.
 - The host and the library are MV3-compatible (no `eval`).
+- Addon icons should be SVG in the Egodact stroke style (no emoji).
