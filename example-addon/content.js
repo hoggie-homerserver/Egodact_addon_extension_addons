@@ -38,6 +38,29 @@
         icon: '&#127918;'
     });
 
+    // Sidebar panel in the weekplanning sidebar.
+    L.sidebar.add({
+        addonId: 'example-addon',
+        id: 'example-sidebar',
+        title: 'Example panel',
+        order: 10,
+        render: function (container) {
+            container.appendChild(el('div', { text: 'Hello from the sidebar!', style: { fontSize: '12px', color: theme().tekst, marginBottom: '6px' } }));
+            container.appendChild(ui.button('Toast', function () {
+                ui.toast('Sidebar button clicked!', { type: 'success' });
+            }, { padding: '4px 8px', fontSize: '11px' }));
+        }
+    });
+
+    // Scheduled reminder (fires after 10 seconds).
+    L.scheduler.schedule({
+        addonId: 'example-addon',
+        id: 'example-reminder',
+        title: 'Example reminder',
+        message: 'This is a scheduled reminder from the example addon!',
+        delay: 10000
+    });
+
     client.onOpen('example-menu', function () {
         client.openModal('Example Addon', '<p>Hello from an addon!</p>');
     });
