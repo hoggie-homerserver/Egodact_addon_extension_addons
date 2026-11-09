@@ -34,7 +34,39 @@
         }
     }, 1000);
 
+    // Verwijdert functies/DOM-nodes uit meta. Chromium laat zulke waarden
+    // niet door CustomEvent-detail tussen extensies heen (het hele event
+    // wordt dan stilletjes gedropt).
+    function sanitizeMeta(value, depth) {
+        depth = depth || 0;
+        if (value === null || typeof value === 'undefined') return value;
+        const t = typeof value;
+        if (t === 'function' || t === 'symbol') return undefined;
+        if (t !== 'object') return value;
+        if (depth > 5) return undefined;
+        if (Array.isArray(value)) {
+            const arr = [];
+            value.forEach(function (v) {
+                const c = sanitizeMeta(v, depth + 1);
+                if (typeof c !== 'undefined') arr.push(c);
+            });
+            return arr;
+        }
+        try {
+            if (typeof Node !== 'undefined' && value instanceof Node) return undefined;
+        } catch (err) {}
+        const out = {};
+        Object.keys(value).forEach(function (k) {
+            let v;
+            try { v = value[k]; } catch (err) { return; }
+            const c = sanitizeMeta(v, depth + 1);
+            if (typeof c !== 'undefined') out[k] = c;
+        });
+        return out;
+    }
+
     function dispatch(type, meta) {
+        meta = sanitizeMeta(meta || {});
         if (hostReady) {
             try {
                 document.dispatchEvent(new CustomEvent('egodact:addon:register', {
