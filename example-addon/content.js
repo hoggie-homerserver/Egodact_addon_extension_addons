@@ -9,9 +9,9 @@
     client.registerAddon({
         id: 'example-addon',
         name: 'Example Addon',
-        version: '1.7.0',
-        description: 'Example addon using the Egodact Addon Library.',
-        author: 'MaxiTaxi'
+        version: '1.6.0',
+        description: 'A minimal example addon with a menu and a game.',
+        author: 'Egodact community'
     });
 
     client.registerMenu({
@@ -21,17 +21,7 @@
         icon: '&#10024;'
     });
 
-    // Also expose it in the host hamburger dropdown. Only items added
-    // through the hamburger helper show up there.
-    L.hamburger.add({
-        addonId: 'example-addon',
-        id: 'example-menu',
-        title: 'Example menu',
-        order: 50,
-        icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.4L20 10l-4 3.6.9 5.9L12 16.7 7.1 19.5 8 13.6 4 10l5.8-1.6z"/></svg>'
-    });
-
-    // Header button in the top bar.
+    // Header-knop in de topbalk van Egodact (SVG-icoon in Egodact-stijl).
     client.registerButton({
         addonId: 'example-addon',
         id: 'example-button',
@@ -40,63 +30,26 @@
         position: 'header'
     });
 
-    // Floating button (anywhere on screen).
-    client.registerButton({
-        addonId: 'example-addon',
-        id: 'example-floating-btn',
-        title: 'Example floating button',
-        icon: '📌',
-        position: 'floating',
-        x: 670,
-        y: 300,
-        draggable: true
-    });
-
     client.registerGame({
         addonId: 'example-addon',
         id: 'example-clicker',
         title: 'Example Clicker',
-        description: 'Click the cube',
+        description: 'Click as fast as you can.',
         icon: '&#127918;'
     });
 
     client.onOpen('example-menu', function () {
-        const body = ui.card({
-            title: 'Example Addon',
-            children: [
-                ui.row({ children: [
-                    ui.button('Say hi', function () { ui.toast('Hello from the library!', { type: 'success' }); }),
-                    ui.button('Danger', function () { ui.toast('Oops!', { type: 'error' }); }, { background: theme().gevaar, color: '#fff' }),
-                    ui.button('Info', function () { ui.toast('This is an info message.', { type: 'info' }); }, { background: '#2e7d32', color: '#fff' })
-                ]})
-            ]
-        });
-        ui.modal('Example Addon', body);
+        client.openModal('Example Addon', '<p>Hello from an addon!</p>');
     });
 
-    // Header button opens a panel to toggle the floating button on/off.
     client.onOpen('example-button', function () {
-        const enabled = client.isButtonEnabled('example-addon', 'example-floating-btn');
-        const status = el('div', { text: enabled ? 'Floating button is ON' : 'Floating button is OFF', style: { fontSize: '13px', color: theme().tekstZacht, marginBottom: '8px' } });
-
-        const toggle = ui.toggle('Floating button', enabled, function (value) {
-            client.setButtonEnabled('example-addon', 'example-floating-btn', value);
-            status.textContent = value ? 'Floating button is ON' : 'Floating button is OFF';
-            ui.toast(value ? 'Floating button enabled' : 'Floating button disabled', { type: value ? 'success' : 'info' });
-            // Re-render without full reload: ask host to update.
-            // (Host removes/adds the button via voegKnoppenToe.)
-        });
-
-        const body = ui.card({
-            title: 'Example Button',
-            children: [toggle, status]
-        });
-        ui.modal('Example Button', body);
+        client.openModal('Example Button', '<p>You clicked the example header button!</p>');
     });
 
     client.onOpen('example-clicker', function () {
+        let score = 0;
         const store = data.storage('clicker');
-        let score = store.get('score', 0);
+        score = store.get('score', 0);
 
         const { canvas, ctx, width, height } = game.createCanvas(null, 320, 220, { background: theme().veld });
         let target = { x: width / 2 - 20, y: height / 2 - 20, w: 40, h: 40, vx: 120, vy: 90 };

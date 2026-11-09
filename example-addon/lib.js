@@ -641,9 +641,15 @@
     // ============================================================
     // HAMBURGER MENU HELPER
     // ============================================================
-    // Items registered here appear in the host's hamburger dropdown
-    // (next to the user's name). Plain client.registerMenu() items do
-    // not; they only live in the Addons library.
+    // Addons register dropdown items here; the host shows a hamburger
+    // button next to the user's name only when at least one item exists.
+    //
+    //   EgodactAddonLib.hamburger.add({ addonId, id, title, icon, order });
+    //   EgodactAddonLib.hamburger.onOpen(id, function () { ... });
+    //
+    // Only items registered through this helper appear in the
+    // hamburger. Regular client.registerMenu() items stay in the
+    // Addons library.
     const hamburger = {
         add: function (meta) {
             meta = meta || {};
@@ -652,6 +658,8 @@
                 if (typeof c.registerHamburger === 'function') c.registerHamburger(meta);
                 else if (typeof c.registerMenu === 'function') c.registerMenu(meta);
                 else {
+                    // Host without SDK helpers: dispatch directly so
+                    // the host can pick it up.
                     try {
                         document.dispatchEvent(new CustomEvent('egodact:addon:register', {
                             detail: { type: 'hamburger', meta: meta }
@@ -667,17 +675,21 @@
         }
     };
 
+    // Friendly aliases on the ui namespace.
     ui.showInDropdown = hamburger.add;
     ui.onDropdownOpen = hamburger.onOpen;
 
     // ============================================================
-    // THEME / CHALLENGES / TOPBAR HELPERS
+    // THEME CHANGE LISTENER
     // ============================================================
     theme.onChange = function (cb) {
         const c = client();
         if (c && typeof c.onThemeChange === 'function') c.onThemeChange(cb);
     };
 
+    // ============================================================
+    // CHALLENGES HELPER
+    // ============================================================
     const challenges = {
         list: function (force) {
             const c = client();
@@ -691,6 +703,9 @@
         }
     };
 
+    // ============================================================
+    // TOPBAR SLOT HELPER
+    // ============================================================
     const topbar = {
         add: function (meta) {
             meta = meta || {};
@@ -706,9 +721,7 @@
         }
     };
 
-    // ============================================================
-    // EXPORT
-    // ============================================================
+
     const lib = {
         version: VERSION,
         theme: theme,
