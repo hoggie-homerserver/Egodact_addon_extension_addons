@@ -49,16 +49,6 @@
             container.appendChild(ui.button('Toast', function () {
                 ui.toast('Sidebar button clicked!', { type: 'success' });
             }, { padding: '4px 8px', fontSize: '11px' }));
-            // Voorbeeld: eindeloos scrollbare Shorts-feed in het sidebar-paneel.
-            container.appendChild(ui.shortsFeed({
-                ids: [
-                    'dQw4w9WgXcQ',
-                    '9bZkp7q19f0'
-                ],
-                height: '400px',
-                infinite: true,   // herhaalt de lijst eindeloos
-                autoplay: false
-            }));
         }
     });
 
