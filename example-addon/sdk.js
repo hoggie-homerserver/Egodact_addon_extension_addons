@@ -107,6 +107,8 @@
         registerSidebarPanel: function (meta) { dispatch('sidebar-panel', meta || {}); },
         registerShortcut: function (meta) { dispatch('shortcut', meta || {}); },
         unregisterShortcut: function (id) { dispatch('unregister-shortcut', { id: id }); },
+        setLearningMode: function (v) { dispatch('learning-mode', { enabled: !!v }); },
+        setHamburgerHidden: function (ids) { dispatch('hamburger-hide', { hidden: Array.isArray(ids) ? ids : [] }); },
         schedule: function (meta) { dispatch('schedule', meta || {}); },
         cancelSchedule: function (id) { dispatch('cancel-schedule', { id: id }); },
         setButtonEnabled: function (addonId, id, enabled) {

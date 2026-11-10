@@ -191,7 +191,26 @@ L.hamburger.add({ addonId: 'my-addon', id: 'compact-mode', title: 'Compact mode'
 L.topbar.add({ addonId: 'my-addon', id: 'compact-btn', title: 'Compact', keepInLearningMode: true });
 ```
 
-Toggle via the hamburger menu -> "Leermodus".
+The host has no toggle of its own; your addon switches it on/off:
+
+```js
+client.setLearningMode(true);   // hides addon buttons + hamburger items
+client.setLearningMode(false);  // restores everything
+```
+
+## Modifying the hamburger menu
+
+Addons can hide specific items in the host's hamburger dropdown. Items must be registered via `L.hamburger.add(...)`; the host tags every dropdown entry with its `id`, so hiding is stable across rebuilds.
+
+```js
+// Hide two items (use the ids you registered).
+client.setHamburgerHidden(['lm-matrix', 'lm-notepad']);
+
+// Show everything again.
+client.setHamburgerHidden([]);
+```
+
+Items marked `keepInLearningMode: true` (and the built-in "Sneltoetsen" entry) are never hidden by learning mode, but `setHamburgerHidden` can still hide them explicitly.
 
 ## Scheduling
 

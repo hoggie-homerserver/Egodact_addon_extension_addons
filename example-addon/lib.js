@@ -848,7 +848,23 @@
         onOpen: function (id, cb) {
             const c = client();
             if (c && typeof c.onOpen === 'function') c.onOpen(id, cb);
-        }
+        },
+        // Hide specific dropdown items (by registered id) in the
+        // host's hamburger menu. Pass [] to show everything again.
+        hide: function (ids) {
+            const list = Array.isArray(ids) ? ids : (ids ? [ids] : []);
+            const c = client();
+            if (c && typeof c.setHamburgerHidden === 'function') {
+                c.setHamburgerHidden(list);
+                return;
+            }
+            try {
+                document.dispatchEvent(new CustomEvent('egodact:addon:register', {
+                    detail: { type: 'hamburger-hide', meta: { hidden: list } }
+                }));
+            } catch (err) {}
+        },
+        show: function () { hamburger.hide([]); }
     };
 
     // Friendly aliases on the ui namespace.
