@@ -157,7 +157,7 @@ Notes:
 - Panels are removed automatically when the weekplanning closes and rebuilt when it reopens.
 - To embed external/local content, use ui.iframe({ src, title, height, sandbox, allow }) inside 
 - For YouTube (including Shorts), use ui.youtube({ url, height, autoplay, mute, loop, controls }); it converts Shorts/watch URLs to the embed URL and sets the required allow attributes.
-- For a scrollable Shorts feed, use ui.shortsFeed({ ids: ['ID1','ID2'], height, autoplay, mute, loop, controls }).
+- For an infinitely scrollable Shorts feed, use ui.shortsFeed({ ids, height, infinite, loadMore, autoplay, mute, loop, controls }). Set infinite: true to loop the list, or provide loadMore: async () => ids[] for true infinite loading.
 ender(container). The host page CSP and your addon's web_accessible_resources determine what may load; for extension pages use chrome.runtime.getURL(...) as src.
 
 ## Scheduling
