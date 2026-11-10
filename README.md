@@ -155,7 +155,9 @@ Notes:
 - The host dispatches `egodact:addon:open` with `{ id, containerId }` (strings only) once the panel's container is mounted. `L.sidebar.add` wires this to your `render(container)`.
 - Never put functions or DOM nodes in `CustomEvent.detail` yourself â€” Chromium silently drops the whole event.
 - Panels are removed automatically when the weekplanning closes and rebuilt when it reopens.
-- To embed external/local content, use ui.iframe({ src, title, height, sandbox, allow }) inside ender(container). The host page CSP and your addon's web_accessible_resources determine what may load; for extension pages use chrome.runtime.getURL(...) as src.
+- To embed external/local content, use ui.iframe({ src, title, height, sandbox, allow }) inside 
+- For YouTube (including Shorts), use ui.youtube({ url, height, autoplay, mute, loop, controls }); it converts Shorts/watch URLs to the embed URL and sets the required allow attributes.
+ender(container). The host page CSP and your addon's web_accessible_resources determine what may load; for extension pages use chrome.runtime.getURL(...) as src.
 
 ## Scheduling
 

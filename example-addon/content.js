@@ -49,12 +49,12 @@
             container.appendChild(ui.button('Toast', function () {
                 ui.toast('Sidebar button clicked!', { type: 'success' });
             }, { padding: '4px 8px', fontSize: '11px' }));
-            // Voorbeeld: een iframe in het sidebar-paneel.
-            container.appendChild(ui.iframe({
-                src: 'https://example.com',
-                title: 'Example iframe',
-                height: '160px',
-                sandbox: 'allow-scripts allow-same-origin'
+            // Voorbeeld: een YouTube Short in het sidebar-paneel.
+            // Gebruik een Shorts- of watch-URL; ui.youtube zet 'm om naar de embed-URL.
+            container.appendChild(ui.youtube({
+                url: 'https://www.youtube.com/shorts/dQw4w9WgXcQ',
+                height: '320px',
+                autoplay: false
             }));
         }
     });
