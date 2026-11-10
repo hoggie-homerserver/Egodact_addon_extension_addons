@@ -49,11 +49,13 @@
             container.appendChild(ui.button('Toast', function () {
                 ui.toast('Sidebar button clicked!', { type: 'success' });
             }, { padding: '4px 8px', fontSize: '11px' }));
-            // Voorbeeld: een YouTube Short in het sidebar-paneel.
-            // Gebruik een Shorts- of watch-URL; ui.youtube zet 'm om naar de embed-URL.
-            container.appendChild(ui.youtube({
-                url: 'https://www.youtube.com/shorts/dQw4w9WgXcQ',
-                height: '320px',
+            // Voorbeeld: scrollbare Shorts-feed in het sidebar-paneel.
+            container.appendChild(ui.shortsFeed({
+                ids: [
+                    'dQw4w9WgXcQ',
+                    '9bZkp7q19f0'
+                ],
+                height: '400px',
                 autoplay: false
             }));
         }
