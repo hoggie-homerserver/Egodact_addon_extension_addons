@@ -975,6 +975,43 @@
     };
 
 
+    // ============================================================
+    // SHORTCUTS HELPER
+    // ============================================================
+    const shortcuts = {
+        add: function (meta) {
+            meta = meta || {};
+            const c = client();
+            const id = meta.id;
+            if (c && typeof c.registerShortcut === 'function') {
+                c.registerShortcut({ addonId: meta.addonId, id: id, title: meta.title, keys: meta.keys, scope: meta.scope || 'global' });
+            } else {
+                try {
+                    document.dispatchEvent(new CustomEvent('egodact:addon:register', {
+                        detail: { type: 'shortcut', meta: { addonId: meta.addonId, id: id, title: meta.title, keys: meta.keys, scope: meta.scope || 'global' } }
+                    }));
+                } catch (err) {}
+            }
+            if (c && typeof c.onShortcut === 'function' && typeof meta.action === 'function') {
+                c.onShortcut(id, function (detail) {
+                    try { meta.action(detail); } catch (err) { console.error(err); }
+                });
+            }
+            return id;
+        },
+        remove: function (id) {
+            const c = client();
+            if (c && typeof c.unregisterShortcut === 'function') c.unregisterShortcut(id);
+            else {
+                try {
+                    document.dispatchEvent(new CustomEvent('egodact:addon:register', {
+                        detail: { type: 'unregister-shortcut', meta: { id: id } }
+                    }));
+                } catch (err) {}
+            }
+        }
+    };
+
     const lib = {
         version: VERSION,
         theme: theme,
@@ -988,6 +1025,7 @@
         challenges: challenges,
         topbar: topbar,
         sidebar: sidebar,
+        shortcuts: shortcuts,
         scheduler: scheduler
     };
 

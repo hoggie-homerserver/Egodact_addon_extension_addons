@@ -81,10 +81,19 @@
     }
 
     const listeners = Object.create(null);
+    const shortcutListeners = Object.create(null);
 
     document.addEventListener('egodact:addon:open', function (event) {
         const id = (event && event.detail && event.detail.id) || null;
         const cbs = listeners[id] || [];
+        cbs.forEach(function (cb) {
+            try { cb(event.detail); } catch (err) { console.error(err); }
+        });
+    });
+
+    document.addEventListener('egodact:addon:shortcut', function (event) {
+        const id = (event && event.detail && event.detail.id) || null;
+        const cbs = shortcutListeners[id] || [];
         cbs.forEach(function (cb) {
             try { cb(event.detail); } catch (err) { console.error(err); }
         });
@@ -96,6 +105,8 @@
         registerButton: function (meta) { dispatch('button', meta || {}); },
         registerGame: function (meta) { dispatch('game', meta || {}); },
         registerSidebarPanel: function (meta) { dispatch('sidebar-panel', meta || {}); },
+        registerShortcut: function (meta) { dispatch('shortcut', meta || {}); },
+        unregisterShortcut: function (id) { dispatch('unregister-shortcut', { id: id }); },
         schedule: function (meta) { dispatch('schedule', meta || {}); },
         cancelSchedule: function (id) { dispatch('cancel-schedule', { id: id }); },
         setButtonEnabled: function (addonId, id, enabled) {
@@ -123,6 +134,10 @@
         onOpen: function (id, cb) {
             if (!listeners[id]) listeners[id] = [];
             listeners[id].push(cb);
+        },
+        onShortcut: function (id, cb) {
+            if (!shortcutListeners[id]) shortcutListeners[id] = [];
+            shortcutListeners[id].push(cb);
         },
         openModal: function (titel, bodyHtml) {
             const bestaand = document.getElementById('egodact-custom-modal-backdrop');

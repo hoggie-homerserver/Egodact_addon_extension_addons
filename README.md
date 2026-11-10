@@ -160,6 +160,28 @@ Notes:
 - For an infinitely scrollable Shorts feed, use ui.shortsFeed({ ids, height, infinite, loadMore, autoplay, mute, loop, controls }). Set infinite: true to loop the list, or provide loadMore: async () => ids[] for true infinite loading.
 ender(container). The host page CSP and your addon's web_accessible_resources determine what may load; for extension pages use chrome.runtime.getURL(...) as src.
 
+## Keyboard shortcuts
+
+Register a global shortcut that the host manages (user can rebind it in the hamburger menu):
+
+```js
+L.shortcuts.add({
+    addonId: 'my-addon',
+    id: 'my-shortcut',
+    title: 'Do something',
+    keys: 'f8',          // default; user can change
+    scope: 'global',     // or 'weekplanning', 'challenges', ...
+    action: function (detail) {
+        ui.toast('Shortcut fired!');
+    }
+});
+```
+
+Notes:
+- Only metadata (addonId, id, title, keys, scope) is sent to the host. The action stays in your addon.
+- The host dispatches egodact:addon:shortcut with { id, addonId } when the shortcut fires.
+- Users can rebind or disable shortcuts in the hamburger menu -> Sneltoetsen.
+
 ## Scheduling
 
 Fire a toast at a specific time:

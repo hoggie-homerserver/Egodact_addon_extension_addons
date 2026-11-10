@@ -9,7 +9,7 @@
     client.registerAddon({
         id: 'example-addon',
         name: 'Example Addon',
-        version: '1.8.0',
+        version: '1.9.0',
         description: 'A minimal example addon with a menu and a game.',
         author: 'Egodact community'
     });
@@ -49,6 +49,17 @@
             container.appendChild(ui.button('Toast', function () {
                 ui.toast('Sidebar button clicked!', { type: 'success' });
             }, { padding: '4px 8px', fontSize: '11px' }));
+        }
+    });
+
+    // Shortcut: toont een toast (standaard F8, aanpasbaar in Egodact).
+    L.shortcuts.add({
+        addonId: 'example-addon',
+        id: 'example-toast',
+        title: 'Example toast',
+        keys: 'f8',
+        action: function () {
+            ui.toast('Shortcut werkt! (example-addon)', { type: 'success' });
         }
     });
 
