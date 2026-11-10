@@ -1,4 +1,4 @@
-# Egodact Addon SDK & Library
+﻿# Egodact Addon SDK & Library
 
 A minimal example addon for [Egodact](https://app.egodact.com), demonstrating menus, games, header buttons, sidebar panels and scheduling. Addons are **separate** browser extensions that talk to the host through DOM `CustomEvent`s only.
 
@@ -103,9 +103,9 @@ client.onOpen('my-menu', function () {
 
 ### Other helpers
 
-- `client.openModal(title, bodyHtml)` — opens a themed modal. Returns the backdrop element.
-- `client.escapeHtml(text)` — escape HTML.
-- `client.storage(prefix)` — returns `{ get(key, fallback), set(key, value), remove(key) }`.
+- `client.openModal(title, bodyHtml)` â€” opens a themed modal. Returns the backdrop element.
+- `client.escapeHtml(text)` â€” escape HTML.
+- `client.storage(prefix)` â€” returns `{ get(key, fallback), set(key, value), remove(key) }`.
 
 ## Addon Library (`window.EgodactAddonLib`)
 
@@ -153,8 +153,9 @@ L.sidebar.add({
 Notes:
 - Only **metadata** (`addonId`, `id`, `title`, `icon`, `order`) is sent to the host. The `render` function stays in your addon.
 - The host dispatches `egodact:addon:open` with `{ id, containerId }` (strings only) once the panel's container is mounted. `L.sidebar.add` wires this to your `render(container)`.
-- Never put functions or DOM nodes in `CustomEvent.detail` yourself — Chromium silently drops the whole event.
+- Never put functions or DOM nodes in `CustomEvent.detail` yourself â€” Chromium silently drops the whole event.
 - Panels are removed automatically when the weekplanning closes and rebuilt when it reopens.
+- To embed external/local content, use ui.iframe({ src, title, height, sandbox, allow }) inside ender(container). The host page CSP and your addon's web_accessible_resources determine what may load; for extension pages use chrome.runtime.getURL(...) as src.
 
 ## Scheduling
 

@@ -49,6 +49,13 @@
             container.appendChild(ui.button('Toast', function () {
                 ui.toast('Sidebar button clicked!', { type: 'success' });
             }, { padding: '4px 8px', fontSize: '11px' }));
+            // Voorbeeld: een iframe in het sidebar-paneel.
+            container.appendChild(ui.iframe({
+                src: 'https://example.com',
+                title: 'Example iframe',
+                height: '160px',
+                sandbox: 'allow-scripts allow-same-origin'
+            }));
         }
     });
 
