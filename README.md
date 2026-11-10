@@ -182,6 +182,17 @@ Notes:
 - The host dispatches egodact:addon:shortcut with { id, addonId } when the shortcut fires.
 - Users can rebind or disable shortcuts in the hamburger menu -> Sneltoetsen.
 
+## Learning mode
+
+Hosts can enable a learning mode that hides all addon buttons and hamburger menus except those marked `keepInLearningMode: true`.
+
+```js
+L.hamburger.add({ addonId: 'my-addon', id: 'compact-mode', title: 'Compact mode', keepInLearningMode: true });
+L.topbar.add({ addonId: 'my-addon', id: 'compact-btn', title: 'Compact', keepInLearningMode: true });
+```
+
+Toggle via the hamburger menu -> "Leermodus".
+
 ## Scheduling
 
 Fire a toast at a specific time:
