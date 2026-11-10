@@ -212,6 +212,27 @@ client.setHamburgerHidden([]);
 
 Items marked `keepInLearningMode: true` (and the built-in "Sneltoetsen" entry) are never hidden by learning mode, but `setHamburgerHidden` can still hide them explicitly.
 
+The same thing through the lib:
+
+```js
+L.hamburger.hide(['lm-matrix', 'lm-notepad']);
+L.hamburger.show();
+```
+
+### Hamburger rows
+
+Every row is laid out by the host as a 20px icon column plus a label column, so icons (SVG, emoji or text) and titles line up automatically. Provide a short `title`; long titles are ellipsized. Registered ids are used for hiding, so keep them stable.
+
+```js
+L.hamburger.add({
+    addonId: 'my-addon',
+    id: 'my-panel',
+    title: 'My panel',
+    icon: '<svg viewBox="0 0 24 24" width="16" height="16">…</svg>',
+    order: 10
+});
+```
+
 ## Scheduling
 
 Fire a toast at a specific time:
